@@ -4,29 +4,34 @@ from tkFileDialog import askdirectory
 
 
 def merge_files(file_folder, param):
-
+    #to return after merging files
     saved_path = os.getcwd()
     print ("Your current directory: "+ saved_path)
-
+    #move to folder to be merged
     print ("Moving to: "+ file_folder)
     os.chdir(file_folder)
-
-    file_list = glob.glob('*'+param)
+    #read files with the parameter
+    file_list = glob.glob('*'+param+'*')
+    #add a confirmation to merge? print list for now
     print file_list
+
+    #variable needed to save header once, for files with same headers
     header_saved = False
-    with open('merged_files.csv','wb') as fout:
+    with open('merged_files.'+param,'wb') as file_out:
         for filename in file_list:
-            with open(filename) as fin:
-                header = next(fin)
+            with open(filename) as file_in:
+                header = next(file_in)
                 if not header_saved:
-                    fout.write(header)
+                    file_out.write(header)
                     header_saved = True
-                for line in fin:
-                    fout.write(line)
+                for line in file_in:
+                    file_out.write(line)
+
+    #Add option to run again?
 
 def define_parameter():
-    """Choose the parameter to limit the file merge with"""
-    parameter = raw_input("Merge parameters? (include '.')> ")
+    """Choose the extension to limit the file merge with"""
+    parameter = raw_input("Merge parameters? (don't include '.')> ")
     return parameter
 
 def choose_folder():
